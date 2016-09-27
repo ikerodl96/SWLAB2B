@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<body background="azul3.jpg">
+<head>
+<meta charset="utf-8">
+<link href="estilos/estil.css" rel="stylesheet" />
+<title>REGISTRO</title>
+
+	<script language="javascript">
+		//Variable global
+		var seleccionado=false;
+		
+		function vervalores(){
+		var sAux="";
+		var frm = document.getElementById("registro");
+		for (i=0;i<frm.elements.length;i++)
+			{ sAux += "NOMBRE: " + frm.elements[i].name + " ";
+			  sAux += "VALOR: " + frm.elements[i].value + "\n" ;
+			}
+		alert(sAux);
+		return true;
+		}
+	
+		function ocultar() {
+			if(seleccionado){
+				document.getElementById("area").style.display='none';
+				seleccionado=false;
+			}
+		}
+		
+		function crearTextArea(){
+			var frm=document.getElementById("area");
+			var aux=document.createElement("input");
+			aux.setAttribute("id","espec");
+			aux.setAttribute("name","otraEspec");
+			frm.innerHTML="Indica la otra especialidad(*):  ";	
+			frm.appendChild(aux);
+			seleccionado=true;
+			document.getElementById("area").style.display='block';
+		}
+		
+  </script>
+</head>
+<body>
+<form action="servidor.php" method="post" onsubmit="return vervalores()" oninput="range_control_value.value = range_control.valueAsNumber">
+<p>
+<h2>REGISTRO</h2>
+<br />
+Nombre y Apellidos(*): <input type="text" name="nombreyapellidos" pattern="[A-z]+([ ][A-z]+)+" placeholder="p. ej. Iñaki Urrutia García" autofocus required />
+<br />
+Direccion de Correo (*): <input type="email" name="email" pattern="[a-z]+\d{3}@ikasle\.ehu\.(es|eus)" placeholder="p. ej. iurrutia001@ikasle.ehu.es" required>
+<br />
+Password (*): <input type="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,8}" Title="La contraseña debe tener al menos 1 minuscula, 1 mayuscula, 1 digito y entre 6-8 caracteres" required />
+<br />
+Numero de Teléfono (*): <input type="tel" name="numtelefono" pattern="[9|8|7|6]\d{8}" placeholder="p. ej. 943666111" required />
+<br />
+Especialidad (*): <br /> 
+   <select name="Especialidad" id="especialidad">
+			<option onClick="ocultar()">Ingenier&iacute;a de Computadores</option>
+			<option onClick="ocultar()">Computaci&oacute;n</option>
+			<option onClick="ocultar()">Ingenier&iacute;a del software</option>
+			<option onClick="crearTextArea()" >Otra...</option>
+	</select> <br> 
+	<div name="area" id="area">
+	</div>
+<br />
+Tecnologias y herramientas en las que esta interesado: <br />
+<textarea name="intereses" rows="10" cols="50" onClick='intereses.value=""'>Escribe aqui tus intereses...</textarea>
+<br />
+Seleccione una imagen <br>
+ <input type="file" id="files" name="files[]" />
+        <br />
+        <output id="list"></output>
+         
+        <script>
+              function archivo(evt) {
+                  var files = evt.target.files; // FileList object
+             
+                  // Obtenemos la imagen del campo "file".
+                  for (var i = 0, f; f = files[i]; i++) {
+                    //Solo admitimos imágenes.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+             
+                    var reader = new FileReader();
+             
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                          // Insertamos la imagen
+                         document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result,'" title="', escape(theFile.name), '"/>'].join('');
+                        };
+                    })(f);
+             
+                    reader.readAsDataURL(f);
+                  }
+              }
+             
+              document.getElementById('files').addEventListener('change', archivo, false);
+      </script>
+	<br />
+<input type="submit" value="Enviar Datos" /> <INPUT TYPE="Reset"> 
+</p>
+</form>
+</body>
+</html>
